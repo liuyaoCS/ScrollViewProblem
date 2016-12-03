@@ -46,8 +46,11 @@ public class MyScrollView extends ScrollView {
 
         if(!isDisableIntercept){
             //list没有请求disableIntercept的话，要走默认流程，不能直接返回true！！！
-            return super.onInterceptTouchEvent(ev);
+            boolean ret=super.onInterceptTouchEvent(ev);
+            Log.i("ly","MyScrollView onInterceptTouchEvent-> action"+ev.getAction()+" ret->"+ret);
+            return ret;
         }else{
+            Log.i("ly","MyScrollView onInterceptTouchEvent-> action"+ev.getAction()+" ret->"+false);
             return false;
         }
     }
