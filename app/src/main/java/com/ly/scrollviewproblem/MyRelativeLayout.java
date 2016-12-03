@@ -22,13 +22,13 @@ public class MyRelativeLayout extends RelativeLayout{
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean ret=super.onInterceptTouchEvent(ev);
-        Log.i("ly","MyRelativeLayout onInterceptTouchEvent->"+ret);
+        //Log.i("ly","MyRelativeLayout onInterceptTouchEvent->"+ret);
         return ret;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.i("ly","MyRelativeLayout onTouchEvent->");
+        //Log.i("ly","MyRelativeLayout onTouchEvent->");
         return super.onTouchEvent(event);
     }
 }

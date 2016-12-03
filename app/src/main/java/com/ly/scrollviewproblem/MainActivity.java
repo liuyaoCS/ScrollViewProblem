@@ -14,8 +14,14 @@ import android.widget.ScrollView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 解决scrollview listview嵌套问题
+ * 1 scrollview fillviewport
+ * 2 listview height
+ * 3 listview onTouchEvent处理：requestDisallowInterceptTouchEvent
+ */
 public class MainActivity extends AppCompatActivity {
-    ListView list;
+    MyListView list;
     MyScrollView scroll;
     RelativeLayout title;
     @TargetApi(Build.VERSION_CODES.M)
@@ -42,32 +48,28 @@ public class MainActivity extends AppCompatActivity {
         data.add("w15");
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,data);
 
-        list= (ListView) findViewById(R.id.list);
+        list= (MyListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
         title= (RelativeLayout) findViewById(R.id.title);
 
         scroll= (MyScrollView) findViewById(R.id.scroll);
-        scroll.setIntercept(true);
-        scroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if(scrollY>=title.getHeight()){
-                        Log.i("ly","ready to change");
-                        scroll.setIntercept(false);
-                    }
-            }
-        });
-
+        //通过代理模式，解耦和list和scroll，代理本身使用了单例模式
+        ViewMedium.getInstance().registerList(list);
+        ViewMedium.getInstance().registerScroll(scroll);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        //需要设定list的全屏高度，否则scroll不能滚动的
         int height=scroll.getMeasuredHeight();
         RelativeLayout.LayoutParams lp= (RelativeLayout.LayoutParams) list.getLayoutParams();
         lp.height=height;
         list.setLayoutParams(lp);
-        Log.i("ly","set over");
+
+        scroll.setRange(title.getHeight());
+
+        Log.i("ly","set over scroll height->"+scroll.getHeight()+" list height->"+list.getHeight());
     }
 }
